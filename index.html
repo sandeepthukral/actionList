@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+<head>
+	<script src="http://code.angularjs.org/1.2.6/angular.min.js"></script>
+	<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
+	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
+	<script src="js.js"></script>
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+</head>
+
+<body ng-controller="DemoController" class="container"  ng-app="DemoApp">
+
+	<h2>Realtime Action List with AngularJS and AngularFire</h2>
+
+
+	<!--ADD ITEM FORM-->
+	<form name="myForm" class="form-inline">
+		<div class="form-group">
+			<div class="input-group">
+				<label> Action </label>
+				<input type="text" name="todoNameField" ng-model="todoName" placeholder="Add new task (min 3 chars)" required ng-minlength="3" class="form-control" ng-keyup="($event.keyCode == 13 && todoName.length > 2) ? addItem() : return" style="margin-bottom: 10px" />
+
+				<label>Responsible: 
+					<select class="form-control" ng-model="todoPerson" ng-options="p for p in persons" required name="todoPersonField"><option></option></select>
+				</label> 
+
+			</div>
+			<div class="input-group">
+				<input type="text" 
+				class="form-control" 
+				name = "todoDateField"
+				datepicker-popup="dd.MM.yyyy" 
+				ng-model="todoDate" 
+				is-open="opened" 
+				min-date="minDate" 
+				max-date="'2018-12-31'" 
+				datepicker-options="dateOptions" 
+				date-disabled="disabled(date, mode)" 
+				required
+				close-text="Close" 
+				ng-keyup="($event.keyCode == 13 && date.length > 2) ? addItem() : return"
+				style="margin-bottom: 10px"
+				/>
+				<span class="input-group-btn">
+					<button type="button" 
+					class="btn btn-default" 
+					ng-click="open($event)"
+					><i class="glyphicon glyphicon-calendar"></i>
+				</button>
+
+			</span>
+		</div>
+		
+		<button ng-click="addItem()"
+		ng-hide="myForm.todoNameField.$invalid || myForm.todoDateField.$invalid || myForm.todoPersonField.$invalid"
+		class="btn btn-primary" type="button"
+		>Add Action Item</button>
+	</div>
+
+</form>
+
+<hr>
+
+
+<!--TODO LIST-->
+
+<div class=" list-group-item row">
+	<div class="col-md-1"><a class='btn'>Done?</a></div>
+	<div class="col-md-5"><button class='btn btn-primary btn-sm' ng-click="sort('todoName')">Task</button></div>
+	<div class="col-md-1"><button class='btn btn-primary btn-sm' ng-click="sort('person')">Responsible</button></div>
+	<div class="col-md-1"><button class='btn btn-primary btn-sm' ng-click="sort('date')">Due by</button></div>
+	<div class="col-md-4"><button>Actions</button></div>
+</div>
+
+<div ng-repeat="item in todos | orderByPriority | orderBy: 'name' :direction" class=" list-group-item row" >
+	<div class="col-md-1">
+		<span class="glyphicon glyphicon-ok"
+		ng-show="item.completed"> </span>
+		<span class="glyphicon glyphicon-remove"
+		ng-hide="item.completed"> </span>
+	</div>
+	<div  class="col-md-5">
+		<span>{{item.name}} </span>
+		<small  class="text-warning"> [ {{item.id}} ]</small>
+	</div>
+	
+	<div class="col-md-1">
+		<span>{{item.person}} </span>
+	</div>
+	
+	<div class="col-md-1">
+		<span>{{item.date | date:'dd-MMM-yyyy'}} </span>
+	</div>
+
+	<div  class="col-md-4">
+		<!--Delete Todo button-->
+		<a class="btn btn-danger" ng-click="removeItem($index, item, $event)">
+			<i class="icon-remove-sign"></i>Delete
+		</a>
+
+		<a class="btn btn-warning" ng-hide="completed" ng-click="changeStatus(item)">
+			<i class="icon-remove-sign"></i>Mark Done
+		</a>
+		<a class="btn btn-warning" ng-show="completed" ng-click="changeStatus(item)">
+			<i class="icon-remove-sign"></i>Mark ToDo
+		</a>
+	</div>
+
+
+</div>
+
+</body>
+
+</html>
