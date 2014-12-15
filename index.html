@@ -2,31 +2,31 @@
 
 <html>
 <head>
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<script src="http://code.angularjs.org/1.2.6/angular.min.js"></script>
 	<script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.js"></script>
 	<script src="https://cdn.firebase.com/v0/firebase.js"></script>
 	<script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
 	<script src="js.js"></script>
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
 </head>
 
 <body ng-controller="DemoController" class="container"  ng-app="DemoApp">
 
 	<h2>Realtime Action List with AngularJS and AngularFire</h2>
-
-
-	<!--ADD ITEM FORM-->
-	<form name="myForm" class="form-inline">
+	
+	<form name="myForm" class="form-inline" role="form">
 		<div class="form-group">
 			<div class="input-group">
-				<label> Action </label>
+				<label > Action </label>
 				<input type="text" name="todoNameField" ng-model="todoName" placeholder="Add new task (min 3 chars)" required ng-minlength="3" class="form-control" ng-keyup="($event.keyCode == 13 && todoName.length > 2) ? addItem() : return" style="margin-bottom: 10px" />
-
-				<label>Responsible: 
-					<select class="form-control" ng-model="todoPerson" ng-options="p for p in persons" required name="todoPersonField"><option></option></select>
-				</label> 
-
 			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<label>Responsible: </label> <select class="form-control" ng-model="todoPerson" ng-options="p for p in persons" required name="todoPersonField"><option></option></select>
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="input-group">
 				<input type="text" 
 				class="form-control" 
@@ -48,20 +48,18 @@
 					class="btn btn-default" 
 					ng-click="open($event)"
 					><i class="glyphicon glyphicon-calendar"></i>
-				</button>
-
-			</span>
-		</div>
+					</button>
+				</span>
+			</div>
 		
-		<button ng-click="addItem()"
-		ng-hide="myForm.todoNameField.$invalid || myForm.todoDateField.$invalid || myForm.todoPersonField.$invalid"
-		class="btn btn-primary" type="button"
-		>Add Action Item</button>
-	</div>
+			<button ng-click="addItem()"
+				ng-hide="myForm.todoNameField.$invalid || myForm.todoDateField.$invalid || myForm.todoPersonField.$invalid"
+				class="btn btn-primary" type="button"
+			>Add Action Item</button>
+		</div>
+	</form>
 
-</form>
-
-<hr>
+	<hr>
 
 
 <!--TODO LIST-->
